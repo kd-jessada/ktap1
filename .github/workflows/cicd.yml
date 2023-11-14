@@ -58,7 +58,12 @@ jobs:
       with:
         name: Unit Test Results
         path: '${{ github.workspace }}/report.html'
-
+        
+    - name: Run Gosec Security Scanner
+      uses: securego/gosec@master
+      with:
+        args: ./...
+  
     - name: Build image
       id: docker_build
       uses: docker/build-push-action@v3
