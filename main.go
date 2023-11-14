@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 func main() {
@@ -13,8 +14,8 @@ func main() {
 	fmt.Printf("hello world\nfrom: %s\n", hostname)
 }
 
-func readfile(filepath string) (res []byte) {
-	res, err := os.ReadFile(filepath)
+func readfile(fpath string) (res []byte) {
+	res, err := os.ReadFile(filepath.Clean(fpath))
 	if err != nil {
 		log.Fatal(err)
 	}
