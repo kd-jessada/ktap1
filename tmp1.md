@@ -46,3 +46,30 @@ certutil.exe -verify -urlfetch "$env:TEMP\storage-googleapis.cer" `
 Select-String -Path "$env:TEMP\gcp-cert-verify.txt" `
   -Pattern "http://|https://|offline|0x80092013|OCSP|CRL|ERROR" |
   Select-Object -First 60
+  
+
+
+============================================
+
+$tcp = [Net.Sockets.TcpClient]::new("199.36.153.8",443)
+
+$ssl = [Net.Security.SslStream]::new($tcp.GetStream(),$false)
+
+$ssl.AuthenticateAsClient("storage.googleapis.com")
+
+$file = "$env:TEMP\googleapi.cer"
+
+[IO.File]::WriteAllBytes($file,$ssl.RemoteCertificate.GetRawCertData())
+
+$ssl.Dispose()
+$tcp.Dispose()
+
+certutil.exe -dump "$env:TEMP\googleapi.cer" |
+  Select-String -Pattern "http://|https://|OCSP|CRL"
+  
+certutil.exe -verify -urlfetch "$env:TEMP\googleapi.cer" > "$env:TEMP\verify.txt" 2>&1
+
+Select-String -Path "$env:TEMP\verify.txt" `
+  -Pattern "http://|https://|OCSP|CRL|0x80092013|offline"
+  
+  
