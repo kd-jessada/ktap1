@@ -59,7 +59,7 @@ $ssl.AuthenticateAsClient("storage.googleapis.com")
 
 $file = "$env:TEMP\googleapi.cer"
 
-[IO.File]::WriteAllBytes($file,$ssl.RemoteCertificate.GetRawCertData())
+"[IO.File]::WriteAllBytes($file,$ssl.RemoteCertificate.GetRawCertData())"
 
 $ssl.Dispose()
 $tcp.Dispose()
